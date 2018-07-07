@@ -166,5 +166,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+setenv.sh
+setenv.bat
 
 # End of https://www.gitignore.io/api/vim,java,linux,maven,windows,intellij,java-web

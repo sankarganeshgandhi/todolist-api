@@ -22,39 +22,38 @@ import static spark.Spark.*;
 public class TodoApp {
     private final static Logger logger = LoggerFactory.getLogger(TodoApp.class);
 
-    private final static int DEFAULT_SERVICE_PORT_NUMBER = 9090;
-
     public static void main(String[] args) {
         Runtime runtime = Runtime.getRuntime();
         final Thread mainThread = Thread.currentThread();
         runtime.addShutdownHook(new Thread() {
             public void run() {
-                TodoDAO.close();
-                mainThread.interrupt();
+            TodoDAO.close();
+            mainThread.interrupt();
             }
         });
 
+        AppConfig.init();
+        TodoDAO.init();
+
         init();
-        logger.info("listening at port #: " + getPort());
     }
 
-    private static int getPort() {
+    /*private static int getPort() {
         /*
          * For deployment in heroku
          */
-        int port = DEFAULT_SERVICE_PORT_NUMBER;
+        /*int port = DEFAULT_SERVICE_PORT_NUMBER;
         ProcessBuilder pb = new ProcessBuilder();
         if (pb.environment().get("PORT") != null) {
             port = Integer.parseInt(pb.environment().get("PORT"));
         }
         return port;
-    }
+    }*/
 
     private static void init() {
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
         staticFiles.location("/public");
-        port(getPort());
-        TodoDAO.init();
+        port(Integer.parseInt(AppConfig.get(AppConfig.APP_SERVICE_PORT)));
 
         get("/todos", (req, res) -> {
             String todos = getTodos(req);

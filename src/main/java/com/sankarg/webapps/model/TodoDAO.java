@@ -4,6 +4,7 @@ import com.mongodb.*;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.sankarg.webapps.AppConfig;
 import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.codecs.Codec;
@@ -18,11 +19,7 @@ import java.util.List;
 public class TodoDAO {
     private final static Logger logger = LoggerFactory.getLogger(TodoDAO.class);
 
-    private final static String APP_DS_URI = "";
-
-    private final static String APP_DS_USER = "";
-    private final static String APP_DS_PWD = "";
-    private final static String APP_DS_URL = "mongodb://" + APP_DS_USER + ":" + APP_DS_PWD + "@" + APP_DS_URI;
+    //private final static String APP_DS_URL = "mongodb://" + APP_DS_USER + ":" + APP_DS_PWD + "@" + APP_DS_URI;
     private final static String APP_DS_DB = "webapps";
     private final static String APP_DS_DB_COLLECTION = "todolist";
 
@@ -36,16 +33,17 @@ public class TodoDAO {
             MongoClient.getDefaultCodecRegistry()
         );
         MongoClientOptions options = MongoClientOptions.builder().codecRegistry(codecRegistry).build();
-        MongoClientURI uri = new MongoClientURI(APP_DS_URL, MongoClientOptions.builder(options));
+        MongoClientURI uri = new MongoClientURI(AppConfig.get(AppConfig.APP_DS_URL),
+            MongoClientOptions.builder(options));
         mongoClient = new MongoClient(uri);
 
         database = mongoClient.getDatabase(APP_DS_DB);
-        logger.info("connected with database: " + database);
+        logger.info("connected with database" + AppConfig.get(AppConfig.APP_DS_URL));
     }
 
     public static void close() {
         mongoClient.close();
-        logger.info("database connection has been closed");
+        logger.info("connection with " + AppConfig.get(AppConfig.APP_DS_URL) + " has been closed");
     }
 
     public static List<Todo> findAll() {
