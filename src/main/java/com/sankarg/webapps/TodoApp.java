@@ -6,10 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.*;
 
-
-//import spark.template.velocity.*;
-//import java.util.*;
-
 import java.util.List;
 
 import static spark.Spark.*;
@@ -37,18 +33,6 @@ public class TodoApp {
 
         init();
     }
-
-    /*private static int getPort() {
-        /*
-         * For deployment in heroku
-         */
-        /*int port = DEFAULT_SERVICE_PORT_NUMBER;
-        ProcessBuilder pb = new ProcessBuilder();
-        if (pb.environment().get("PORT") != null) {
-            port = Integer.parseInt(pb.environment().get("PORT"));
-        }
-        return port;
-    }*/
 
     private static void init() {
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
